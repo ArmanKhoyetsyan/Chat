@@ -5,7 +5,7 @@ import Chat from './pages/Chat/Chat';
 import LoginForma from './pages/loginForm/LoginForm';
 
 export const socket = io.connect('http://localhost:3030');
-//socket.emit('user_name', { name: "Arman" })
+socket.emit('user_name', { name: "Arman" })
 
 
 function App() {
