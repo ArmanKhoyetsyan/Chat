@@ -1,5 +1,5 @@
 import { Button, ButtonGroup } from '@mui/material'
-import './userPanel.css'
+import './UserPanel.css'
 
 export default function UserPanel() {
 

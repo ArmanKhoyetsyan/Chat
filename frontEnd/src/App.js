@@ -1,21 +1,21 @@
 import './App.css';
-import PrimarySearchAppBar from './appBar/AppBar';
-import MessagePanel from './messagePanel/messagePanel';
-import UserPanel from './userPanel/usersPanel';
+import io from 'socket.io-client';
+import { Route, Routes } from 'react-router-dom';
+import Chat from './pages/Chat/Chat';
+import LoginForma from './pages/loginForm/LoginForm';
+
+export const socket = io.connect('http://localhost:3030');
+//socket.emit('user_name', { name: "Arman" })
+
 
 function App() {
 
-
   return (
-    <div className="App">
-      <PrimarySearchAppBar />
+      <Routes>
+        <Route path='chat' element={<Chat />} />
+        <Route path='*' element={<LoginForma />} />
+      </Routes>
 
-      <div style={{ display: 'flex', flexDirection: 'row', marginTop:'8px'}}>
-        <UserPanel />
-        <MessagePanel />
-      </div>
-
-    </div>
   );
 }
 
