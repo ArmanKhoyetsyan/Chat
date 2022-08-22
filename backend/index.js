@@ -18,6 +18,11 @@ app.use(bodyParser.json({ limit: '50mb' }));
 
 app.post('/login', router)
 
-app.listen(port, () => console.log(`Port${port}`))
+io.on('connection', (socket) => {
+    socket.on('send_message', (data) => {        
+        socket.broadcast.emit("receive_message",data)
+    })
 
+});
 
+server.listen(port, () => console.log(`Port${port}`))
