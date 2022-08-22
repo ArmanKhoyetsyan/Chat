@@ -1,24 +1,35 @@
 import { Button, TextField } from '@mui/material'
-import { useState } from 'react'
-import './messagePanel.css'
+import { useEffect, useState } from 'react'
+import { socket } from '../../../App';
+import './MessagePanel.css'
 
 
 export default function MessagePanel() {
     const [inputVal, setInputVal] = useState('')
 
-    const [message, setMessage] = useState(["asdads", "asdads", "asdads", "asdads", "asdads", "asdads", "asdads",]);
-
+    const [message, setMessage] = useState([]);
+    
     function sendMessage() {
-
+        socket.emit('send_message', { message: inputVal })
+        const a = JSON.parse(JSON.stringify(message))
+        a.push(inputVal)
+        setMessage(a)
         setInputVal('')
     }
+    useEffect(() => {
+        socket.on("receive_message", (data) => {
+            console.log("🚀 ~ file: messagePanel.js ~ line 22 ~ socket.on ~ data.message", data.message)
+            //setMessage([...data.message])
+
+        })
+    }, [socket])
 
     return (
         <div className="messagePanel">
             <div className='messageField'>
-                {/* {message.map((el) => {
-                    return (<h5>{el}</h5>)
-                })} */}
+                {message.map((el) => {
+                    return (<h5 key={el}>{el}</h5>)
+                })}
             </div>
 
             <div className='inputAndBtMessage' >

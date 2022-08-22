@@ -1,5 +1,6 @@
 .userPanel {
     border: 1px solid #d7dce5;
+    margin-right: 8px;
     border-radius: 3%;
     width: 20%;
     height: 85vh;
