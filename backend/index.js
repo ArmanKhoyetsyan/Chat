@@ -1,4 +1,6 @@
-const express = require('express');
+const express = require('express')
+const cors = require('cors')
+
 const app = express();
 const http = require('http');
 const { Server } = require('socket.io');
@@ -11,11 +13,11 @@ const io = new Server(server, {
 
 app.use(cors())
 
-io.on('connection', (socket) => {
-    socket.on('send_message', (data) => {        
-        socket.broadcast.emit("receive_message",data)
-    })
-    
-});
 
-server.listen(port, () => console.log(`Port${port}`))
+app.get('/',(req,res)=>{
+    res.send('hi')
+})
+
+app.listen(port, () => console.log(`Port${port}`))
+
+
