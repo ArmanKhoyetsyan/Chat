@@ -1,0 +1,10 @@
+.loginForm {
+    margin-left: 500px;
+    height: 250px;
+    border: 1px solid gray;
+    width: 310px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}

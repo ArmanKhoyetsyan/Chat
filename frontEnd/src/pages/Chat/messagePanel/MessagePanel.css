@@ -1,0 +1,16 @@
+.messagePanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 80%;
+
+}
+.inputAndBtMessage {
+    display: flex;
+    flex-direction: row;
+}
+.messageField{
+    height: 100%;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+}

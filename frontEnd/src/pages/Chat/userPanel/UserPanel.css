@@ -1,0 +1,17 @@
+.userPanel {
+    border: 1px solid #d7dce5;
+    margin-right: 8px;
+    border-radius: 3%;
+    width: 20%;
+    height: 85vh;
+    text-align: center;
+    background-color: #d7dce5;
+}
+
+.btn:hover {
+    background-color: #1976d2 !important;
+    color: #d7dce5;
+}
+.btn {
+    font-weight: 600 !important;
+}
