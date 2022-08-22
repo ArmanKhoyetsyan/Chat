@@ -9,7 +9,7 @@ const pool = new Pool({
 
 const getUsers = async (req, res) => {
     try {
-        const response = await pool.query("SELECT id FROM users")
+        const response = await pool.query(`SELECT name FROM users`)
         res.status(200).json(response.rows)
     } catch (error) {
         console.log(error)
