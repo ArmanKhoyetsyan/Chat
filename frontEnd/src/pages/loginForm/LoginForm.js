@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function InputAdornments() {
   const navigate = useNavigate()
-
+  const [state, setState] = React.useState(false);
   const [values, setValues] = React.useState({
     userName: '',
     password: '',
@@ -21,7 +21,6 @@ export default function InputAdornments() {
 
 
   return (
-
 
     <div className='loginForm'>
       <div className='mailInput'>
@@ -44,16 +43,25 @@ export default function InputAdornments() {
           />
         </FormControl>
       </div>
+      {state ? <div className='pass' >Wrong password or user name</div> : ''}
       <Button variant="contained" onClick={async () => {
-        const res = await loginBtClick(values)
-        if (res.status === 200) {
-          navigate('/chat')
-        } else {
-          setValues({
-            userName: '',
-            password: '',
-          })
+        try {
+          const res = await loginBtClick(values)
+          const data = await res.text()
+          const user = JSON.parse(data)
+          if (res.status === 200) {
+            navigate(`/chat/id${user.id}/${user.name}`)
+          } else {
+            setState(true)
+            setValues({
+              userName: '',
+              password: '',
+            })
+          }
+        } catch (error) {
+          console.log(error)
         }
+
       }}>LogIn</Button>
 
     </div>

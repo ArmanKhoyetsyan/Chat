@@ -17,6 +17,7 @@ const getUsers = async () => {
     }
 }
 
+const getMessages = async () =>{}
 
 
-module.exports = { getUsers }
+    module.exports = { getUsers }

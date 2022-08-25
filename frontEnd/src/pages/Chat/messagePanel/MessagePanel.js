@@ -1,6 +1,6 @@
 import { Button, TextField } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { socket } from '../../../App';
+import { socket } from '../Chat'
 import './MessagePanel.css'
 
 
@@ -8,27 +8,31 @@ export default function MessagePanel() {
     const [inputVal, setInputVal] = useState('')
 
     const [message, setMessage] = useState([]);
-    
+    const userName = window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1)
+
     function sendMessage() {
-        socket.emit('send_message', { message: inputVal })
-        const a = JSON.parse(JSON.stringify(message))
-        a.push(inputVal)
-        setMessage(a)
-        setInputVal('')
+        if (inputVal.length > 0) {
+            socket.emit('send_message', { message: inputVal, userName: userName })
+            socket.emit('send_userName', { userName: userName })
+            setInputVal('')
+        }
     }
     useEffect(() => {
-        socket.on("receive_message", (data) => {
-            console.log("🚀 ~ file: messagePanel.js ~ line 22 ~ socket.on ~ data.message", data.message)
-            //setMessage([...data.message])
+        socket.emit('send_userName', { userName: userName })
+    }, [])
 
+    useEffect(() => {
+        socket.on('send_message', (data) => {
+            const newMessage = JSON.parse(JSON.stringify(message.push(data.message)))
+            setMessage([newMessage])
         })
-    }, [socket])
+    }, [])
 
     return (
         <div className="messagePanel">
             <div className='messageField'>
-                {message.map((el) => {
-                    return (<h5 key={el}>{el}</h5>)
+                {message.map((el, i) => {
+                    return (<h5 key={i}>{el}</h5>)
                 })}
             </div>
 

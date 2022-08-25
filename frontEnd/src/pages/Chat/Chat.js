@@ -1,9 +1,12 @@
 import PrimarySearchAppBar from "./appBar/AppBar";
 import MessagePanel from "./messagePanel/MessagePanel";
 import UserPanel from "./userPanel/UsersPanel";
+import io from 'socket.io-client';
 
 
+export const socket = io.connect('http://localhost:3030');
 export default function Chat() {
+
     return (
 
         <div className="App">

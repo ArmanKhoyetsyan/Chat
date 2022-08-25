@@ -5,6 +5,6 @@ const authorizationHandler = require('./middleware');
 const router = express.Router();
 
 router.post('/login', authorizationHandler,(req, res) => logIn(req, res))
-
+// router.get('/onlineUsers',authorizationHandler,(req,res)=>)
 
 module.exports = router;
