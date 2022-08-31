@@ -8,7 +8,6 @@ export default function UserPanel() {
     const [isGroupe, setIsGroupe] = useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [groupe, setGroupe] = useState([]);
-    console.log("🚀 ~ file: UsersPanel.js ~ line 11 ~ UserPanel ~ groupe", groupe)
     const [userName, setUserName] = useState(window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1))
 
     useEffect(() => {
