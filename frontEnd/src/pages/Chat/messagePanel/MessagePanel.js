@@ -34,10 +34,9 @@ export default function MessagePanel() {
     }
 
     useEffectArman(() => {
-        //if (message.length > 2) {
         updateScroll()
-        // }
     }, [message])
+    
     useEffect(() => {
         socket.on('send_message', (data) => {
             setMessage(data?.messages)
