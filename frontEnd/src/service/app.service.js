@@ -29,16 +29,16 @@ async function loginBtClick({ userName, password }) {
 //     return response;
 // }
 
-async function getGroups() {
-    const myHeaders = new Headers({
-        'Content-Type': 'application/json',
-        'api_key': API_KEY
-    });
-    const response = await fetch('http://localhost:3030/groups', {
-        method: 'GET',
-        headers: myHeaders,
-    });
-    return response;
-}
+// async function getGroups() {
+//     const myHeaders = new Headers({
+//         'Content-Type': 'application/json',
+//         'api_key': API_KEY
+//     });
+//     const response = await fetch('http://localhost:3030/groups', {
+//         method: 'GET',
+//         headers: myHeaders,
+//     });
+//     return response;
+// }
 
-export { loginBtClick, getGroups }
+export { loginBtClick }

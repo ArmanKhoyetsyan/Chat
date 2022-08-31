@@ -27,7 +27,7 @@ export default function InputAdornments() {
         <TextField
           id="outlined-basic"
           onChange={handleChange('userName')}
-          label="Email"
+          label="Name"
           value={values.userName}
           variant="outlined" />
       </div>

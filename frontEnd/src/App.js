@@ -9,7 +9,7 @@ function App() {
 
   return (
       <Routes>
-        <Route path='chat/:userId/:userName' element={<Chat />} />
+        <Route path='chat/:userId/:userName/*' element={<Chat />} />
         <Route path='*' element={<LoginForma />} />
       </Routes>
 

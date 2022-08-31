@@ -6,11 +6,11 @@ const http = require('http');
 const { Server } = require('socket.io');
 const router = require('./routers');
 const { route } = require('./routers');
+const { getUserId, getGroupeId, getMessages, writeMessages, getGroups, createGroupe, getUserName } = require('./db.request');
 const server = http.createServer(app);
 const port = process.env.PORT || 3030;
 const io = new Server(server, {
     cors: {
-
     }
 });
 
@@ -23,11 +23,55 @@ app.post('/login', router)
 
 io.on('connection', (socket) => {
     connection.push({ id: socket.id })
-    
-    socket.on('send_message', (data) => {
-        io.emit('send_message', data)
+
+
+    socket.on('get_groupe', async (data) => {
+        const userId = await getUserId(data.userName)
+        const groupers = await getGroups(userId)
+        for (let elem of groupers) {
+            elem.firstuser = await getUserName(elem.firstuser)
+            elem.seconduser = await getUserName(elem.seconduser)
+        }
+        io.emit('get_groupe', groupers)
     })
-    
+
+    socket.on('get_messages', async (data) => {
+        const secondUserId = await getUserId(data.secondUser)
+        const firstUserId = await getUserId(data.firstUser)
+        const groupId = await getGroupeId(firstUserId, secondUserId)
+        if (groupId) {
+            const messages = await getMessages(groupId)
+            io.emit('get_messages', {
+                messages: messages,
+                secondUserId: secondUserId,
+                secondUserName: data.secondUser,
+                firstUserId: firstUserId,
+                firstUserName: data.firstUser
+            })
+        } else {
+            await createGroupe(secondUserId, firstUserId)
+            const groupId = await getGroupeId(firstUserId, secondUserId)
+            await writeMessages("Hi", groupId, secondUserId)
+            const messages = await getMessages(groupId)
+            io.emit('get_messages', {
+                messages: messages,
+                secondUserId: secondUserId,
+                secondUserName: data.secondUser,
+                firstUserId: firstUserId,
+                firstUserName: data.firstUser
+            })
+        }
+    })
+
+    socket.on('send_message', async (data) => {
+        const secondUserId = await getUserId(data.secondUserName)
+        const firstUserId = await getUserId(data.firstUserName)
+        const groupId = await getGroupeId(firstUserId, secondUserId)
+        await writeMessages(data.message, groupId, firstUserId)
+        const messages = await getMessages(groupId)
+        io.emit('send_message', messages)
+    })
+
     socket.on('send_userName', (data) => {
         let i;
         const user = connection.find((el, index) => {
@@ -35,7 +79,7 @@ io.on('connection', (socket) => {
             return el.id === socket.id
         })
         connection[i].userName = data.userName
-        io.emit('connect_new_user',connection)
+        io.emit('connect_new_user', connection)
     })
 
     socket.on('disconnect', () => {
@@ -45,8 +89,8 @@ io.on('connection', (socket) => {
             return el.id === socket.id
         })
         connection.splice(i, 1)
-        io.emit('disconnect_new_user',connection)
-        
+        io.emit('disconnect_user', connection)
+
     })
 
 });
