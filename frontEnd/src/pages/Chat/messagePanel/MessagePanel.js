@@ -9,7 +9,7 @@ export default function MessagePanel() {
     const [message, setMessage] = useState([]);
     const [firstUserName, setFirstUserName] = useState(window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1))
     const [groupId, setGroupId] = useState()
-    
+
     function sendMessage() {
         if (inputVal.length > 0) {
             socket.emit('send_message', { message: inputVal, sender: firstUserName, groupId: groupId })
@@ -21,16 +21,19 @@ export default function MessagePanel() {
         var element = document.getElementById('messageField');
         element.scrollTop = element?.scrollHeight;
     }
-    
+
     useEffect(() => {
         socket.on('send_message', (data) => {
-            setMessage(data)
+            setMessage(data?.messages)
+            updateScroll()
+
         })
         socket.on('get_messages', (data) => {
             setGroupId(data?.groupId)
-            if (firstUserName === data.firstUser){
+            if (firstUserName === data.firstUser) {
                 setMessage(data?.messages)
                 updateScroll()
+
             }
         })
         socket.emit('send_userName', { userName: firstUserName })

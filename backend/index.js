@@ -45,9 +45,9 @@ io.on('connection', (socket) => {
         // if (groupId) {
         const messages = await getMessages(groupId)
         io.emit('get_messages', {
-            groupId:groupId,
+            groupId: groupId,
             messages: messages,
-            firstUser:data.firstUser            
+            firstUser: data.firstUser
         })
         // } else {
         //     await createGroupe(secondUserId, firstUserId)
@@ -68,7 +68,7 @@ io.on('connection', (socket) => {
         const senderId = await getUserId(data.sender)
         await writeMessages(data.message, data.groupId, senderId)
         const messages = await getMessages(data.groupId)
-        io.emit('send_message', messages)
+        io.emit('send_message', { messages: messages, sender: data.sender })
     })
 
     socket.on('send_userName', (data) => {
