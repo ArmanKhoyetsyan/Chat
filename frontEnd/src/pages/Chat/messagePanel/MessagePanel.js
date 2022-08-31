@@ -22,18 +22,30 @@ export default function MessagePanel() {
         element.scrollTop = element?.scrollHeight;
     }
 
+    function useEffectArman(func, arrVal) {
+        const render = useRef(0)
+        useEffect(() => {
+            if (render.current > 1) {
+                func()
+            } else {
+                render.current++
+            }
+        }, [arrVal]);
+    }
+
+    useEffectArman(() => {
+        //if (message.length > 2) {
+        updateScroll()
+        // }
+    }, [message])
     useEffect(() => {
         socket.on('send_message', (data) => {
             setMessage(data?.messages)
-            updateScroll()
-
         })
         socket.on('get_messages', (data) => {
             setGroupId(data?.groupId)
             if (firstUserName === data.firstUser) {
                 setMessage(data?.messages)
-                updateScroll()
-
             }
         })
         socket.emit('send_userName', { userName: firstUserName })
