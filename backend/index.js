@@ -11,6 +11,8 @@ const server = http.createServer(app);
 const port = process.env.PORT || 3030;
 const io = new Server(server, {
     cors: {
+        origin: "http://192.168.31.183:3000",
+        methods: ["GET", "POST", "PUT"]
     }
 });
 
@@ -20,6 +22,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 const connection = []
 
 app.post('/login', router)
+app.get('getMessages', router)
 
 io.on('connection', (socket) => {
     connection.push({ id: socket.id })
@@ -39,36 +42,32 @@ io.on('connection', (socket) => {
         const secondUserId = await getUserId(data.secondUser)
         const firstUserId = await getUserId(data.firstUser)
         const groupId = await getGroupeId(firstUserId, secondUserId)
-        if (groupId) {
-            const messages = await getMessages(groupId)
-            io.emit('get_messages', {
-                messages: messages,
-                secondUserId: secondUserId,
-                secondUserName: data.secondUser,
-                firstUserId: firstUserId,
-                firstUserName: data.firstUser
-            })
-        } else {
-            await createGroupe(secondUserId, firstUserId)
-            const groupId = await getGroupeId(firstUserId, secondUserId)
-            await writeMessages("Hi", groupId, secondUserId)
-            const messages = await getMessages(groupId)
-            io.emit('get_messages', {
-                messages: messages,
-                secondUserId: secondUserId,
-                secondUserName: data.secondUser,
-                firstUserId: firstUserId,
-                firstUserName: data.firstUser
-            })
-        }
+        // if (groupId) {
+        const messages = await getMessages(groupId)
+        io.emit('get_messages', {
+            groupId:groupId,
+            messages: messages,
+            firstUser:data.firstUser            
+        })
+        // } else {
+        //     await createGroupe(secondUserId, firstUserId)
+        //     const groupId = await getGroupeId(firstUserId, secondUserId)
+        //     await writeMessages("Hi", groupId, secondUserId)
+        //     const messages = await getMessages(groupId)
+        //     io.emit('get_messages', {
+        //         messages: messages,
+        //         secondUserId: secondUserId,
+        //         secondUserName: data.secondUser,
+        //         firstUserId: firstUserId,
+        //         firstUserName: data.firstUser
+        //     })
+        // }
     })
 
     socket.on('send_message', async (data) => {
-        const secondUserId = await getUserId(data.secondUserName)
-        const firstUserId = await getUserId(data.firstUserName)
-        const groupId = await getGroupeId(firstUserId, secondUserId)
-        await writeMessages(data.message, groupId, firstUserId)
-        const messages = await getMessages(groupId)
+        const senderId = await getUserId(data.sender)
+        await writeMessages(data.message, data.groupId, senderId)
+        const messages = await getMessages(data.groupId)
         io.emit('send_message', messages)
     })
 

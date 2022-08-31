@@ -30,9 +30,9 @@ CREATE TABLE
     CONSTRAINT fk_groupId FOREIGN KEY(groupId) REFERENCES groupMessage(id));
 
 INSERT INTO
-  message(message, sender)
+  message(message, senderId)
 VALUES
-  ('Barev', 'Arman');
+  ('Barev', 2);
 
 INSERT INTO
   groupMessage(firstUser, secondUser)

@@ -4,7 +4,7 @@ import UserPanel from "./userPanel/UsersPanel";
 import io from 'socket.io-client';
 
 
-export const socket = io.connect('http://localhost:3030');
+export const socket = io.connect('http://192.168.31.183:3030');
 export default function Chat() {
 
     return (
