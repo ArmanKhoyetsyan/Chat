@@ -8,3 +8,7 @@
     flex-direction: column;
     align-items: center;
 }
+.pass {
+    color: brown;
+    margin-bottom: 8px;
+}
