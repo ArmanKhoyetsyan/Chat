@@ -27,15 +27,16 @@ const getUserId = async (userName) => {
 const getUserName = async (userId) => {
     try {
         const response = await pool.query(`SELECT * FROM users where id=$1;`, [userId])
-        return response.rows[0]?.name
+        return response.rows?.[0]?.name
     } catch (error) {
         console.log(error)
     }
 }
+
 const getGroupeId = async (firstUserId, secondUserId) => {
     try {
         const response = await pool.query(`SELECT * FROM groupmessage where firstuser=$1 AND seconduser=$2 OR firstuser=$2 AND seconduser=$1;`, [firstUserId, secondUserId])
-        return response.rows[0]?.id
+        return response.rows?.[0]?.id
     } catch (error) {
         console.log(error);
     }
@@ -49,14 +50,15 @@ const getMessages = async (groupId) => {
         console.log(error)
     }
 }
-const writeMessages = async (message, groupid, senderid) => {
+
+const writeMessages = async (message, groupid, senderid, lastMessage) => {
     try {
-        await pool.query(`INSERT INTO messages(message,groupid, senderid) VALUES($1,$2,$3)`, [message, groupid, senderid])
+        await pool.query(`INSERT INTO messages(message,groupid, senderid,lastMessage) VALUES($1,$2,$3,$4)`, [message, groupid, senderid,lastMessage])
     } catch (error) {
         console.log(error)
-
     }
 }
+
 const getGroups = async (userId) => {
     try {
         const response = await pool.query(`SELECT * FROM groupmessage where firstuser=$1 OR seconduser=$1`, [userId])
@@ -64,7 +66,6 @@ const getGroups = async (userId) => {
     } catch (error) {
         console.log(error)
     }
-
 }
 
 const createGroupe = async (secondUserId, firstUserId) => {

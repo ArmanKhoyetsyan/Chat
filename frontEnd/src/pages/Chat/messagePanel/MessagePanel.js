@@ -5,18 +5,18 @@ import './MessagePanel.css'
 
 
 export default function MessagePanel() {
-    const [inputVal, setInputVal] = useState('')
+    const [inputVal, setInputVal] = useState('');
     const [message, setMessage] = useState([]);
-    const [firstUserName, setFirstUserName] = useState(window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1))
-    const [groupId, setGroupId] = useState()
-
+    const [groupId, setGroupId] = useState();
+    const firstUserName = window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1);
     function sendMessage() {
         if (inputVal.length > 0) {
-            socket.emit('send_message', { message: inputVal, sender: firstUserName, groupId: groupId })
             socket.emit('send_userName', { userName: firstUserName })
+            socket.emit('send_message', { message: inputVal, sender: firstUserName, groupId: groupId })
             setInputVal('')
         }
     }
+
     function updateScroll() {
         var element = document.getElementById('messageField');
         element.scrollTop = element?.scrollHeight;
@@ -36,18 +36,25 @@ export default function MessagePanel() {
     useEffectArman(() => {
         updateScroll()
     }, [message])
-    
+
     useEffect(() => {
         socket.on('send_message', (data) => {
-            setMessage(data?.messages)
-        })
-        socket.on('get_messages', (data) => {
-            setGroupId(data?.groupId)
-            if (firstUserName === data.firstUser) {
+            const user = data?.connection.find(el => {
+                return el.id === socket.id
+            })
+            if (user?.getMessage) {
                 setMessage(data?.messages)
             }
         })
-        socket.emit('send_userName', { userName: firstUserName })
+        socket.on('get_messages', (data) => {
+            setGroupId(data?.groupId)
+            const user = data?.connection.find(el => {
+                return el.id === socket.id
+            })
+            if (user?.getMessage) {
+                setMessage(data?.messages)
+            }
+        })
     }, [])
 
     return (
@@ -55,7 +62,7 @@ export default function MessagePanel() {
             < div className="messagePanel" >
                 <div className='messageField' id='messageField'>
                     {message.map((el, i, arr) => {
-                        if (el?.senderid === arr[0]?.senderid) {
+                        if (el?.senderid === 3) {
                             return (<h4 key={i} className='user1'>{el.message}</h4>)
                         } else {
                             return (<h4 key={i} className='user2'>{el.message}</h4>)

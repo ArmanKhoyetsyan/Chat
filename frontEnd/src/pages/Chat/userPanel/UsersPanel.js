@@ -11,9 +11,10 @@ export default function UserPanel() {
     const [userName, setUserName] = useState(window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1))
 
     useEffect(() => {
+        socket.emit('get_groupe', { userName: userName })
+        socket.emit('send_userName', { userName: userName })
         socket.on('connect_new_user', arr => setOnlineUsers(arr))
         socket.on('disconnect_user', arr => setOnlineUsers(arr))
-        socket.emit('get_groupe', { userName: userName })
         socket.on('get_groupe', arr => setGroupe(arr))
     }, []);
 

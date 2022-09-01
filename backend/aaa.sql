@@ -27,12 +27,14 @@ CREATE TABLE
     message VARCHAR(500),
     groupId INT,
     senderId INT,
-    CONSTRAINT fk_groupId FOREIGN KEY(groupId) REFERENCES groupMessage(id));
+    lastMessage INT,
+    CONSTRAINT fk_groupId FOREIGN KEY(groupId) REFERENCES groupMessage(id)
+  );
 
 INSERT INTO
-  message(message, senderId)
+  messages(message, groupId, senderId, lastMessage)
 VALUES
-  ('Barev', 2);
+  ('Barev', 2, 1, 5);
 
 INSERT INTO
   groupMessage(firstUser, secondUser)
