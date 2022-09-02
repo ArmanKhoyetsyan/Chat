@@ -9,7 +9,7 @@ async function loginBtClick({ userName, password }) {
         'Content-Type': 'application/json',
         'api_key': API_KEY
     });
-    const response = await fetch('http://192.168.31.183:3030/login', {
+    const response = await fetch('https://armankhoyetsyantest.herokuapp.com/login', {
         body: data,
         method: 'POST',
         headers: myHeaders,
@@ -17,22 +17,22 @@ async function loginBtClick({ userName, password }) {
     return response;
 }
 
-async function getMessages({ firstUserName, secondUserName }) {
-    const data = JSON.stringify({
-        'firstUserName': firstUserName,
-        'secondUserName': secondUserName
-    });
-    const myHeaders = new Headers({
-        'Content-Type': 'application/json',
-        'api_key': API_KEY
-    });
-    const response = await fetch('http://192.168.31.183:3030/getMessages', {
-        body: data,
-        method: 'GET',
-        headers: myHeaders,
-    });
-    return response;
-}
+// async function getMessages({ firstUserName, secondUserName }) {
+//     const data = JSON.stringify({
+//         'firstUserName': firstUserName,
+//         'secondUserName': secondUserName
+//     });
+//     const myHeaders = new Headers({
+//         'Content-Type': 'application/json',
+//         'api_key': API_KEY
+//     });
+//     const response = await fetch('http://192.168.31.183:3030/getMessages', {
+//         body: data,
+//         method: 'GET',
+//         headers: myHeaders,
+//     });
+//     return response;
+// }
 
 // async function getGroups() {
 //     const myHeaders = new Headers({
@@ -46,4 +46,4 @@ async function getMessages({ firstUserName, secondUserName }) {
 //     return response;
 // }
 
-export { loginBtClick, getMessages }
+export { loginBtClick }
