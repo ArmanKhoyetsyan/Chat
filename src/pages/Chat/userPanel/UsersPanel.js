@@ -16,7 +16,7 @@ export default function UserPanel() {
         socket.on('connect_new_user', arr => setOnlineUsers(arr))
         socket.on('disconnect_user', arr => setOnlineUsers(arr))
         socket.on('get_groupe', arr => setGroupe(arr))
-    });
+    },[]);
 
     return (
         <div className='userPanel'>
