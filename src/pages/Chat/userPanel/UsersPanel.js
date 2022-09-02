@@ -8,7 +8,7 @@ export default function UserPanel() {
     const [isGroupe, setIsGroupe] = useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [groupe, setGroupe] = useState([]);
-    const [userName, setUserName] = useState(window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1))
+    const userName = window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1)
 
     useEffect(() => {
         socket.emit('get_groupe', { userName: userName })
@@ -16,7 +16,7 @@ export default function UserPanel() {
         socket.on('connect_new_user', arr => setOnlineUsers(arr))
         socket.on('disconnect_user', arr => setOnlineUsers(arr))
         socket.on('get_groupe', arr => setGroupe(arr))
-    }, []);
+    });
 
     return (
         <div className='userPanel'>
