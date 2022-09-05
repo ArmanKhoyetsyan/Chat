@@ -42,12 +42,12 @@ export default function UserPanel() {
                 {isOnline ?
                     <div className='onlineUsers'>
                         {onlineUsers.map((el, i) => {
-                            if (el.userName && el.userName !== userName) {
+                            if (el && el !== userName) {
                                 return <div
                                     className='user'
                                     key={i}
                                     onClick={() => {
-                                        socket.emit('get_messages', { secondUser: el.userName, firstUser: userName })
+                                        socket.emit('get_messages', { secondUser: el, firstUser: userName })
                                     }}
                                 >{el.userName}</div>
                             } else {
