@@ -37,8 +37,8 @@ export default function UserPanel() {
             <div className=''>
                 {isOnline ?
                     <div className='onlineUsers'>
-                        {onlineUsers.map((el, i) => {
-                            if (el && el !== userName) {
+                       {onlineUsers.map((el, i) => {
+                            if (el.userName && el.userName !== userName) {
                                 return <div
                                     className='user'
                                     key={i}
