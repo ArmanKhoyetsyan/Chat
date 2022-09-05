@@ -14,8 +14,8 @@ export default function UserPanel() {
         socket.emit('get_groupe', { userName: userName })
         socket.emit('send_userName', { userName: userName })
         socket.on('connect_new_user', arr => {
-            let newArr = arr.map(el => el.userName)
-            let namesArr = Array.from(new Set(newArr))
+            let namesArr = arr.map(el => el.userName)
+            let onlineUserName = Array.from(new Set(namesArr))
             setOnlineUsers(namesArr)
         })
         socket.on('disconnect_user', arr => setOnlineUsers(arr))
@@ -49,7 +49,7 @@ export default function UserPanel() {
                                     onClick={() => {
                                         socket.emit('get_messages', { secondUser: el, firstUser: userName })
                                     }}
-                                >{el.userName}</div>
+                                >{el}</div>
                             } else {
                                 return ''
                             }
