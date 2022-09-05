@@ -14,8 +14,9 @@ export default function UserPanel() {
         socket.emit('get_groupe', { userName: userName })
         socket.emit('send_userName', { userName: userName })
         socket.on('connect_new_user', arr => {
-            let newArr = Array.from(new Set(arr))
-            setOnlineUsers(newArr)
+            let newArr = arr.map(el => el.userName)
+            let namesArr = Array.from(new Set(newArr))
+            setOnlineUsers(namesArr)
         })
         socket.on('disconnect_user', arr => setOnlineUsers(arr))
         socket.on('get_groupe', arr => setGroupe(arr))
