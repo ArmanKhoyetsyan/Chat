@@ -13,11 +13,7 @@ export default function UserPanel() {
     useEffect(() => {
         socket.emit('get_groupe', { userName: userName })
         socket.emit('send_userName', { userName: userName })
-        socket.on('connect_new_user', arr => {
-            let namesArr = arr.map(el => el.userName)
-            let onlineUserName = Array.from(new Set(namesArr))
-            setOnlineUsers(namesArr)
-        })
+        socket.on('connect_new_user', arr => setOnlineUsers(arr))
         socket.on('disconnect_user', arr => setOnlineUsers(arr))
         socket.on('get_groupe', arr => setGroupe(arr))
     }, []);
@@ -47,9 +43,9 @@ export default function UserPanel() {
                                     className='user'
                                     key={i}
                                     onClick={() => {
-                                        socket.emit('get_messages', { secondUser: el, firstUser: userName })
+                                        socket.emit('get_messages', { secondUser: el.userName, firstUser: userName })
                                     }}
-                                >{el}</div>
+                                >{el.userName}</div>
                             } else {
                                 return ''
                             }
