@@ -50,7 +50,7 @@ export default function InputAdornments() {
           const data = await res.text()
           const user = JSON.parse(data)
           if (res.status === 200) {
-            navigate(`/chat/id${user.id}/${user.name}`)
+            navigate(`/chat/${user.name}`)
           } else {
             setState(true)
             setValues({
