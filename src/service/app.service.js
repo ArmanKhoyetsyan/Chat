@@ -9,7 +9,7 @@ async function loginBtClick({ userName, password }) {
         'Content-Type': 'application/json',
         'api_key': API_KEY
     });
-    const response = await fetch('http://localhost:3030/login', {
+    const response = await fetch('https://armankhoyetsyantest.herokuapp.com/login', {
         body: data,
         method: 'POST',
         headers: myHeaders,
