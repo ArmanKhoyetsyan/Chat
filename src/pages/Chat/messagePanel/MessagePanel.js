@@ -1,5 +1,6 @@
 import { Button, TextField } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { socket } from '../Chat'
 import './MessagePanel.css'
 
@@ -8,11 +9,19 @@ export default function MessagePanel() {
     const [inputVal, setInputVal] = useState('');
     const [message, setMessage] = useState([]);
     const [groupId, setGroupId] = useState();
+    const [firstUserId, setFirstUserId] = useState()
     const firstUserName = window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1);
+
     function sendMessage() {
         if (inputVal.length > 0) {
+            const date = new Date()
             socket.emit('send_userName', { userName: firstUserName })
-            socket.emit('send_message', { message: inputVal, sender: firstUserName, groupId: groupId })
+            socket.emit('send_message', {
+                message: inputVal,
+                sender: firstUserName,
+                groupId: groupId,
+                messageTime: date
+            })
             setInputVal('')
         }
     }
@@ -48,6 +57,7 @@ export default function MessagePanel() {
         })
         socket.on('get_messages', (data) => {
             setGroupId(data?.groupId)
+            setFirstUserId(data.firstUserId)
             const user = data?.connection.find(el => {
                 return el.id === socket.id
             })
@@ -62,10 +72,19 @@ export default function MessagePanel() {
             < div className="messagePanel" >
                 <div className='messageField' id='messageField'>
                     {message.map((el, i, arr) => {
-                        if (el?.senderid === 3) {
-                            return (<h4 key={i} className='user1'>{el.message}</h4>)
+                        if (el?.senderid === firstUserId) {
+                            return (
+                                <div className='user1' key={i}>
+                                    <h4  >{el.message}</h4>
+                                    {el.read && <DoneAllIcon sx={{ fontSize: 'small' }} />}
+                                </div>
+                            )
                         } else {
-                            return (<h4 key={i} className='user2'>{el.message}</h4>)
+                            return (
+                                <div className='user2' key={i}>
+                                    <h4 >{el.message}</h4>
+                                </div>
+                            )
                         }
                     })}
                 </div>
