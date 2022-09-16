@@ -9,6 +9,8 @@ export default function MessagePanel() {
   const [message, setMessage] = useState([]);
   const [groupId, setGroupId] = useState();
   const [firstUserId, setFirstUserId] = useState();
+  const [end, setEnd] = useState(false);
+  const allMessage = useRef(false)
   const firstUserName = window.location.pathname.slice(
     window.location.pathname.lastIndexOf("/") + 1
   );
@@ -29,7 +31,14 @@ export default function MessagePanel() {
 
   function updateScroll() {
     var element = document.getElementById("messageField");
-    element.scrollTop = element?.scrollHeight;
+    if (message.length === 20) {
+      element.scrollTop = element.scrollHeight;
+    } else if (inputVal) {
+      element.scrollTop = element.scrollHeight
+    }
+    else {
+      element.scrollTop = 250
+    }
   }
 
   function useEffectArman(func, arrVal) {
@@ -40,12 +49,9 @@ export default function MessagePanel() {
       } else {
         render.current++;
       }
+      // eslint-disable-next-line
     }, [arrVal]);
   }
-
-  useEffectArman(() => {
-    updateScroll();
-  }, [message]);
 
   useEffect(() => {
     socket.on("send_message", (data) => {
@@ -66,11 +72,35 @@ export default function MessagePanel() {
         setMessage(data?.messages);
       }
     });
+    socket.on("get_former_messages", ({ messages, allMessages }) => {
+      setMessage(messages)
+      if (allMessages) {
+        allMessage.current = true
+        setEnd(true)
+      }
+    });
   }, []);
+
+  useEffectArman(() => {
+    updateScroll();
+  }, []);
+
+
+  useEffect(() => {
+    document.getElementById("messageField")?.addEventListener('scroll', (event) => {
+      if (!allMessage.current && event.target.scrollTop === 0) {
+        socket.emit('get_former_messages', {
+          groupId: groupId
+        })
+      }
+    })
+  })
+
 
   return message.length > 0 ? (
     <div className="messagePanel">
       <div className="messageField" id="messageField">
+        {end && <h4 style={{ textAlign: 'center', fontSize: 'larger' }}>--------------------END--------------------</h4>}
         {message.map((el, i, arr) => {
           if (el?.senderid === firstUserId) {
             return (
