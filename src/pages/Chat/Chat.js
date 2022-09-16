@@ -3,8 +3,8 @@ import MessagePanel from "./messagePanel/MessagePanel";
 import UserPanel from "./userPanel/UsersPanel";
 import io from 'socket.io-client';
 
-//'https://armankhoyetsyantest.herokuapp.com'
-export const socket = io.connect('http://localhost:3030');
+//'http://localhost:3030'
+export const socket = io.connect('https://armankhoyetsyantest.herokuapp.com');
 export default function Chat() {
 
     return (
