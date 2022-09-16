@@ -37,7 +37,7 @@ export default function UserPanel() {
             <div className=''>
                 {isOnline ?
                     <div className='onlineUsers'>
-                       {onlineUsers.map((el, i) => {
+                        {onlineUsers.map((el, i) => {
                             if (el.userName && el.userName !== userName) {
                                 return <div
                                     className='user'
@@ -54,13 +54,17 @@ export default function UserPanel() {
                 }
                 {isGroupe ? <div className='onlineUsers'>
                     {groupe.map((el, i) => {
+                        const value = `${el.firstuser === userName ?
+                            `${el.firstuser}-${el.seconduser}` : `${el.seconduser} - ${el.firstuser}`}`;
                         return <div
                             key={i}
                             className='groupe'
                             onClick={() => {
-                                socket.emit('get_messages', { secondUser: el.seconduser, firstUser: el.firstuser })
+                                const secondUser = value.slice(value.lastIndexOf('-') + 1).trim()
+                                const firstUser = value.slice(0, value.indexOf('-')).trim()
+                                socket.emit('get_messages', { secondUser: secondUser, firstUser: firstUser })
                             }}
-                        >{`${el.firstuser}-${el.seconduser}`}</div>
+                        >{value}</div>
                     }
                     )}
                 </div> : ''}

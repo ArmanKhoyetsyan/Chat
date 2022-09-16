@@ -14,18 +14,24 @@
     border: 1px solid #bbb;
     border-radius: 6px;
     overflow: scroll;
-    max-height: 72vh;
+    max-height: 77vh;
 }
 .user1{
     background-color: rgb(156, 182, 175);
-    margin-left: auto;
-}
-.user2{
-    background-color: rgb(136, 173, 118);
-}
-h4{
     width: fit-content;
     padding: 2px 10px;
     border-radius: 18%;
     margin: 6px 8px 15px 8px;
+    margin-left: auto;
+}
+.user2{
+    background-color: rgb(136, 173, 118);
+    width: fit-content;
+    padding: 2px 10px;
+    border-radius: 18%;
+    margin: 6px 8px 15px 8px;
+}
+h4{
+    margin: 0;
+    padding: 0;    
 }
