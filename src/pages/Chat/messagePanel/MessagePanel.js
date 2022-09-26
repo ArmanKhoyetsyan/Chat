@@ -18,7 +18,7 @@ export default function MessagePanel() {
   );
 
   function sendMessage() {
-    if (inputVal.length > 0) {
+    if (inputVal.length > 1) {
       const date = new Date();
       socket.emit("send_userName", { userName: firstUserName });
       socket.emit('get_last_messages', { secondUser: secondUser, firstUser: firstUserName })
