@@ -12,6 +12,7 @@
     background-color: #1976d2 !important;
     color: #d7dce5;
 }
+
 .btn {
     font-weight: 600 !important;
 }
@@ -24,6 +25,7 @@
     padding: 6px;
     cursor: pointer;
 }
+
 .groupe {
     margin: 10px;
     padding: 10px;
@@ -31,4 +33,37 @@
     font-size: x-large;
     font-family: monospace;
     cursor: pointer;
+}
+
+.userName_online {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.lastMessage_notReading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.not_readding {
+    border: 3px red solid;
+    margin-left: auto;
+    padding: 4px;
+    border-radius: 70%;
+}
+
+.online {
+    border: 4px green solid;
+    width: 0px;
+    height: 0px;
+    margin-left: 4%;
+}
+
+.last_message {
+    font-family: emoji;
+    font-size: large;
 }

@@ -1,6 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import DoneIcon from '@mui/icons-material/Done';
 import { socket } from "../Chat";
 import "./MessagePanel.css";
 
@@ -9,6 +10,7 @@ export default function MessagePanel() {
   const [message, setMessage] = useState([]);
   const [groupId, setGroupId] = useState();
   const [firstUserId, setFirstUserId] = useState();
+  const [secondUser, setSecondUser] = useState()
   const [end, setEnd] = useState(false);
   const allMessage = useRef(false)
   const firstUserName = window.location.pathname.slice(
@@ -19,6 +21,7 @@ export default function MessagePanel() {
     if (inputVal.length > 0) {
       const date = new Date();
       socket.emit("send_userName", { userName: firstUserName });
+      socket.emit('get_last_messages', { secondUser: secondUser, firstUser: firstUserName })
       socket.emit("send_message", {
         message: inputVal,
         sender: firstUserName,
@@ -31,20 +34,20 @@ export default function MessagePanel() {
 
   function updateScroll() {
     var element = document.getElementById("messageField");
-    if (message.length === 20) {
-      element.scrollTop = element.scrollHeight;
-    } else if (inputVal) {
-      element.scrollTop = element.scrollHeight
-    }
-    else {
-      element.scrollTop = 250
-    }
+    //if (message.length === 20) {
+    element.scrollTop = element.scrollHeight;
+    // } else if (inputVal) {
+    //   element.scrollTop = element.scrollHeight
+    // }
+    // else {
+    //   element.scrollTop = 250
+    // }
   }
 
   function useEffectArman(func, arrVal) {
     const render = useRef(0);
     useEffect(() => {
-      if (render.current) {
+      if (render.current > 1) {
         func();
       } else {
         render.current++;
@@ -58,18 +61,35 @@ export default function MessagePanel() {
       const user = data?.connection.find((el) => {
         return el.id === socket.id;
       });
-      if (user?.getMessage) {
+      if (user?.secondGetMessage) {
         setMessage(data?.messages);
+        socket.emit('get_groupe', { userName: firstUserName })
       }
     });
-    socket.on("get_messages", (data) => {
+
+    socket.on('get_my_messages', (data) => {
       setGroupId(data?.groupId);
       setFirstUserId(data.firstUserId);
+      setSecondUser(data.secondUser)
       const user = data?.connection.find((el) => {
         return el.id === socket.id;
       });
-      if (user?.getMessage) {
+      if (user?.secondGetMessage) {
         setMessage(data?.messages);
+        socket.emit('get_groupe', { userName: firstUserName })
+      }
+    })
+
+    socket.on("get_messages", (data) => {
+      setGroupId(data?.groupId);
+      setFirstUserId(data.firstUserId);
+      setSecondUser(data.secondUser)
+      const user = data?.connection.find((el) => {
+        return el.id === socket.id;
+      });
+      if (user?.secondGetMessage) {
+        setMessage(data?.messages);
+        socket.emit('get_groupe', { userName: firstUserName })
       }
     });
     socket.on("get_former_messages", ({ messages, allMessages }) => {
@@ -79,6 +99,16 @@ export default function MessagePanel() {
         setEnd(true)
       }
     });
+    socket.on('update_message', (data) => {
+      socket.emit('get_my_messages', {
+        groupId: data?.groupId,
+        firstUserId: data?.firstUserId,
+        secondUser: data?.secondUser,
+        firstUser: data?.firstUser
+      })
+    }
+    )
+    // eslint-disable-next-line
   }, []);
 
   useEffectArman(() => {
@@ -109,7 +139,8 @@ export default function MessagePanel() {
                 {firstUserId === el.senderid && el.read ? (
                   <DoneAllIcon sx={{ fontSize: "small" }} />
                 ) : (
-                  ""
+                  <DoneIcon sx={{ fontSize: "small" }} />
+
                 )}
               </div>
             );
@@ -119,7 +150,7 @@ export default function MessagePanel() {
                 <h4>{el.message}</h4>
                 {firstUserId === el.senderid
                   ? el.read && <DoneAllIcon sx={{ fontSize: "small" }} />
-                  : ""}
+                  : ''}
               </div>
             );
           }
