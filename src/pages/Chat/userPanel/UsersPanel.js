@@ -86,7 +86,7 @@ export default function UserPanel() {
                                     }
                                     {
                                         <div
-                                            className={el.notReading > 0 && 'not_readding'}
+                                            className={el.notReading > 0 ? 'not_readding' : ''}
                                             style={el.notReading > 0 ? { marginLeft: 'auto' } : {}}
                                         >
                                             {el.notReading > 0 && el.notReading}

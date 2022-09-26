@@ -18,7 +18,7 @@ export default function MessagePanel() {
   );
 
   function sendMessage() {
-    if (inputVal.length > 0) {
+    if (inputVal.length > 1) {
       const date = new Date();
       socket.emit("send_userName", { userName: firstUserName });
       socket.emit('get_last_messages', { secondUser: secondUser, firstUser: firstUserName })
@@ -47,7 +47,7 @@ export default function MessagePanel() {
   function useEffectArman(func, arrVal) {
     const render = useRef(0);
     useEffect(() => {
-      if (render.current > 1) {
+      if (render.current > 2) {
         func();
       } else {
         render.current++;
@@ -101,6 +101,7 @@ export default function MessagePanel() {
     });
     socket.on('update_message', (data) => {
       socket.emit('get_my_messages', {
+        userSecondGetMessage: data?.userSecondGetMessage,
         groupId: data?.groupId,
         firstUserId: data?.firstUserId,
         secondUser: data?.secondUser,
