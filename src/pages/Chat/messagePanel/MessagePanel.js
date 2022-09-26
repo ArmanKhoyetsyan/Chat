@@ -47,7 +47,7 @@ export default function MessagePanel() {
   function useEffectArman(func, arrVal) {
     const render = useRef(0);
     useEffect(() => {
-      if (render.current) {
+      if (render.current > 1) {
         func();
       } else {
         render.current++;
@@ -66,6 +66,20 @@ export default function MessagePanel() {
         socket.emit('get_groupe', { userName: firstUserName })
       }
     });
+
+    socket.on('get_my_messages', (data) => {
+      setGroupId(data?.groupId);
+      setFirstUserId(data.firstUserId);
+      setSecondUser(data.secondUser)
+      const user = data?.connection.find((el) => {
+        return el.id === socket.id;
+      });
+      if (user?.secondGetMessage) {
+        setMessage(data?.messages);
+        socket.emit('get_groupe', { userName: firstUserName })
+      }
+    })
+
     socket.on("get_messages", (data) => {
       setGroupId(data?.groupId);
       setFirstUserId(data.firstUserId);
@@ -85,9 +99,16 @@ export default function MessagePanel() {
         setEnd(true)
       }
     });
-    socket.on('update_message', () => {console.log(groupId)
-      console.log("🚀 ~ file: MessagePanel.js ~ line 99 ~ useEffect ~ secondUser", secondUser)
-      socket.emit('get_messages', { secondUser: secondUser, firstUser: firstUserName })})
+    socket.on('update_message', (data) => {
+      socket.emit('get_my_messages', {
+        groupId: data?.groupId,
+        firstUserId: data?.firstUserId,
+        secondUser: data?.secondUser,
+        firstUser: data?.firstUser
+      })
+    }
+    )
+    // eslint-disable-next-line
   }, []);
 
   useEffectArman(() => {
