@@ -123,6 +123,7 @@ export default function MessagePanel() {
         socket.emit('get_former_messages', {
           groupId: groupId
         })
+        updateScroll();
       }
     })
   })
