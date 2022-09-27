@@ -9,7 +9,6 @@ export default function MessagePanel() {
   const [inputVal, setInputVal] = useState("");
   const [message, setMessage] = useState([]);
   const [groupId, setGroupId] = useState();
-  console.log("🚀 ~ file: MessagePanel.js ~ line 12 ~ MessagePanel ~ groupId", groupId)
   const [firstUserId, setFirstUserId] = useState();
   const [secondUser, setSecondUser] = useState()
   const [end, setEnd] = useState(false);
