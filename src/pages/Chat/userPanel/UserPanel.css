@@ -8,15 +8,6 @@
     background-color: #d7dce5;
 }
 
-.btn:hover {
-    background-color: #1976d2 !important;
-    color: #d7dce5;
-}
-
-.btn {
-    font-weight: 600 !important;
-}
-
 .user {
     margin: 12px;
     border: gray 1px solid;
@@ -27,9 +18,10 @@
 }
 
 .groupe {
+    border-radius: 15px;
     margin: 10px;
     padding: 10px;
-    border: rgb(17, 17, 121) 1px solid;
+    border: rgb(165 165 165) 3px solid;
     font-size: x-large;
     font-family: monospace;
     cursor: pointer;
