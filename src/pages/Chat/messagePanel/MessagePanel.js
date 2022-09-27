@@ -166,6 +166,19 @@ export default function MessagePanel() {
           value={inputVal}
           maxRows={2}
           sx={{ width: "222%" }}
+          onKeyDown={e => {
+            if (e.keyCode === 13 && e.ctrlKey) {
+              e.preventDefault()
+              setInputVal(e.target.value + `${<br/>}`);
+              return
+            }
+            if (e.key === "Enter") {
+              e.preventDefault()
+              sendMessage()
+              return
+            }
+
+          }}
           onChange={(event) => {
             setInputVal(event.target.value);
           }}
