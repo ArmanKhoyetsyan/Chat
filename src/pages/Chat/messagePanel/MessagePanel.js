@@ -169,7 +169,7 @@ export default function MessagePanel() {
           onKeyDown={e => {
             if (e.keyCode === 13 && e.ctrlKey) {
               e.preventDefault()
-              setInputVal(e.target.value + `${<br/>}`);
+              setInputVal(e.target.value + '\n');
               return
             }
             if (e.key === "Enter") {
