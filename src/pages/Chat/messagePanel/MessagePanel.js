@@ -9,6 +9,7 @@ export default function MessagePanel() {
   const [inputVal, setInputVal] = useState("");
   const [message, setMessage] = useState([]);
   const [groupId, setGroupId] = useState();
+  console.log("🚀 ~ file: MessagePanel.js ~ line 12 ~ MessagePanel ~ groupId", groupId)
   const [firstUserId, setFirstUserId] = useState();
   const [secondUser, setSecondUser] = useState()
   const [end, setEnd] = useState(false);
@@ -84,6 +85,8 @@ export default function MessagePanel() {
       setGroupId(data?.groupId);
       setFirstUserId(data.firstUserId);
       setSecondUser(data.secondUser)
+      setEnd(false)
+      allMessage.current = false
       const user = data?.connection.find((el) => {
         return el.id === socket.id;
       });
@@ -99,8 +102,8 @@ export default function MessagePanel() {
         setEnd(true)
       }
     });
-    socket.on('update_message', (data) => {
-      socket.emit('get_my_messages', {
+    socket.on('update_message', async (data) => {
+      await socket.emit('get_my_messages', {
         userSecondGetMessage: data?.userSecondGetMessage,
         groupId: data?.groupId,
         firstUserId: data?.firstUserId,
@@ -118,14 +121,17 @@ export default function MessagePanel() {
 
 
   useEffect(() => {
-    document.getElementById("messageField")?.addEventListener('scroll', (event) => {
+    const meesageField = document.getElementById("messageField")
+    const scroll = (event) => {
       if (!allMessage.current && event.target.scrollTop === 0) {
-        socket.emit('get_former_messages', {
-          groupId: groupId
-        })
+        updateScroll()
+        socket.emit('get_former_messages', { groupId: groupId })
       }
-    })
-  })
+    }
+    meesageField?.addEventListener('scroll', scroll)
+    return () => meesageField?.removeEventListener('scroll', scroll)
+
+  }, [groupId])
 
 
   return message.length > 0 ? (
