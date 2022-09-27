@@ -81,6 +81,8 @@ export default function MessagePanel() {
     })
 
     socket.on("get_messages", (data) => {
+      setEnd(false)
+      allMessage.current = false
       setGroupId(data?.groupId);
       setFirstUserId(data.firstUserId);
       setSecondUser(data.secondUser)
