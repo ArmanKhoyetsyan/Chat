@@ -13,7 +13,8 @@
     height: 100%;
     border: 1px solid #bbb;
     border-radius: 6px;
-    overflow: scroll;
+    overflow-y: scroll;
+    
     max-height: 77vh;
 }
 .user1{
